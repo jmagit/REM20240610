@@ -18,7 +18,7 @@ public class EmisorConfig {
     }
     
     @Bean
-    public MessageConverter jsonConverter() {
+    MessageConverter jsonConverter() {
     	return new Jackson2JsonMessageConverter();
     }
     
