@@ -8,11 +8,13 @@ import java.util.logging.Logger;
 
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.AsyncRabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.models.MessageDTO;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -47,6 +51,18 @@ public class EmisorResource {
 		return "SEND: " + msg;
 	}
 
+	@GetMapping(path = "/message/{nombre}")
+	@ResponseStatus(HttpStatus.ACCEPTED)
+	public String raw(@PathVariable String nombre) throws JsonProcessingException {
+		var payload = new MessageDTO("Hola " + nombre, origen);
+		ObjectMapper mapper = new ObjectMapper();
+		var cad = mapper.writeValueAsString(payload);
+		var message = MessageBuilder.withBody(cad.getBytes()).build();
+		amqp.send(deadLetterQueue.getName(), message);
+		return "SEND: " + message;
+	}
+
+
 	@GetMapping(path = "/saludos/{cantidad}")
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public String saludos(@PathVariable int cantidad) throws InterruptedException {
@@ -59,10 +75,24 @@ public class EmisorResource {
 
 	@GetMapping(path = "/fallido")
 	@ResponseStatus(HttpStatus.ACCEPTED)
+	@Operation(tags = { "dead-letter" })
 	public String fallido() {
 		amqp.convertAndSend(saludosQueue.getName(), new MessageDTO(null, origen));
 		return "SEND ERROR";
 	}
+
+	@Autowired
+	Queue deadLetterQueue;
+	
+	@GetMapping(path = "/lasterror")
+	@Operation(tags = { "dead-letter" })
+	public ResponseEntity<?> lastError() {
+		var last = amqp.receiveAndConvert(deadLetterQueue.getName());
+		if(last == null)
+			return ResponseEntity.notFound().build();
+		return ResponseEntity.ok(last);
+	}
+
 
 	@Value("${app.rpc.routing-key}")
 	String routingKey;
@@ -115,5 +145,5 @@ public class EmisorResource {
 	public Collection<MessageDTO> todasLasRespuestas() {
 		return respuestas.values().stream().sorted((a, b) -> b.getEnviadoDate().compareTo(a.getEnviadoDate())).toList();
 	}
-
+	
 }
