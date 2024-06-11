@@ -30,4 +30,22 @@ public class EmisorResource {
 		amqp.convertAndSend(saludosQueue.getName(), new MessageDTO(msg, origen));
 		return "SEND: " + msg;
 	}
+	
+	@GetMapping(path = "/saludos/{cantidad}")
+	@ResponseStatus(HttpStatus.ACCEPTED)
+	public String saludos(@PathVariable int cantidad) throws InterruptedException {
+		for(int i=1; i <= cantidad; i++) {
+			amqp.convertAndSend(saludosQueue.getName(), new MessageDTO("Envio nº: " + i, origen));
+			Thread.sleep(500);
+		}
+		return "Enviados: " + cantidad;
+	}
+
+	@GetMapping(path = "/fallido")
+	@ResponseStatus(HttpStatus.ACCEPTED)
+	public String fallido() {
+		amqp.convertAndSend(saludosQueue.getName(), new MessageDTO(null, origen));
+		return "SEND ERROR";
+	}
+
 }
