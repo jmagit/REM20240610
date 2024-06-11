@@ -8,7 +8,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class EmisorConfig {
+public class AmqpAgentConfig {
+    @Bean
+    Queue saludosQueue(@Value("${app.cola}") String queue) {
+        return new Queue(queue);
+    }
     
+    @Bean
+    MessageConverter jsonConverter() {
+    	return new Jackson2JsonMessageConverter();
+    }
 
 }
