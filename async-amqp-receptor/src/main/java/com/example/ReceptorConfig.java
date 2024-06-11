@@ -13,9 +13,9 @@ public class ReceptorConfig {
     private static final Logger LOGGER = Logger.getLogger(ReceptorConfig.class.getName());
     
     @RabbitListener(queues = "${app.cola}")
-    public void listener(MessageDTO in) {
+    public void listener(MessageDTO in) throws InterruptedException {
     	Store.add(in);
+    	Thread.sleep(in.getMsg().length() * 500);
     	LOGGER.warning("RECIBIDO: " + in);
     }
-
 }
