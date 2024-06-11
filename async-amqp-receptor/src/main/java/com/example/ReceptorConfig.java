@@ -3,7 +3,7 @@ package com.example;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class EmisorConfig {
+public class ReceptorConfig {
     
 
 }
