@@ -1,5 +1,7 @@
 package com.example.resources;
 
+import java.util.List;
+
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Queue;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.models.MessageDTO;
+import com.example.models.Store;
+import com.example.models.Store.Message;
 
 @RestController
 public class RecibidosResource {
@@ -23,11 +27,8 @@ public class RecibidosResource {
 	@Autowired
 	private AmqpTemplate amqp;
 	
-	@GetMapping(path = "/saludo/{nombre}")
-	@ResponseStatus(HttpStatus.ACCEPTED)
-	public String saluda(@PathVariable String nombre) {
-		var msg = "Hola " + nombre;
-		amqp.convertAndSend(saludosQueue.getName(), new MessageDTO(msg, origen));
-		return "SEND: " + msg;
+	@GetMapping(path = "/recibidos")
+	public List<Message> recibidos() {
+		return Store.get();
 	}
 }
