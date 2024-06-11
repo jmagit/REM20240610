@@ -43,9 +43,9 @@ public class ReceptorConfig {
     @RabbitListener(queues = "${app.rpc.queue}")
     public MessageDTO responde(MessageDTO in) throws InterruptedException {
     	LOGGER.warning("SOLICITUD RECIBIDA: " + in);
-    	Thread.sleep(in.getMsg().length() * 1000);
+    	Thread.sleep(in.getMsg().length() * 500);
     	LOGGER.warning("RESPONDIENDO EN: " + new Date());
-    	var out = new MessageDTO((rnd.nextInt(1) == 0 ? "ACEPTADA " : "RECHAZADA ") + in.toString(), origen);
+    	var out = new MessageDTO((rnd.nextInt(2) == 0 ? "ACEPTADA -> " : "RECHAZADA -> ") + in.toString(), origen);
     	out.setId(in.getId());
     	return out;
     }

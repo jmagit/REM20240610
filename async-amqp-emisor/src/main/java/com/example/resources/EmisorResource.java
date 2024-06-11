@@ -113,7 +113,7 @@ public class EmisorResource {
 	@GetMapping(path = "/x-rpc/respuestas")
 	@Operation(tags = { "web-hooks" })
 	public Collection<MessageDTO> todasLasRespuestas() {
-		return respuestas.values();
+		return respuestas.values().stream().sorted((a, b) -> b.getEnviadoDate().compareTo(a.getEnviadoDate())).toList();
 	}
 
 }
