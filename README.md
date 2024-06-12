@@ -33,6 +33,7 @@
 - https://github.com/spring-projects/spring-hateoas-examples
 - https://github.com/spring-projects/spring-amqp-samples
 - https://github.com/rabbitmq/rabbitmq-tutorials/tree/main/spring-amqp
+- https://github.com/spring-projects/spring-kafka/tree/main/samples
 
 ## Base de datos de ejemplos
 
