@@ -2,6 +2,7 @@ package com.example;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -11,8 +12,15 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootApplication
+@EnableScheduling
 public class AsyncKafkaSensorApplication implements CommandLineRunner {
     private static final Logger LOG = Logger.getLogger(AsyncKafkaSensorApplication.class.getName());
 
@@ -30,6 +38,7 @@ public class AsyncKafkaSensorApplication implements CommandLineRunner {
 	private Random rnd = new Random();
 	@Override
 	public void run(String... args) throws Exception {
+		sendEvent(tema + "-logger", idSensor, String.format("INFO - Arranca el sensor: %s", idSensor));
 		var peloton = new ArrayList<Integer>();
 		for(var i=1; i <= dorsales; peloton.add(i++));
 		Collections.shuffle(peloton);
@@ -38,6 +47,16 @@ public class AsyncKafkaSensorApplication implements CommandLineRunner {
 			sendEvent(tema, idSensor, dorsal.toString());
 			Thread.sleep(rnd.nextInt(5) * 500);
 		}
+		sendEvent(tema + "-logger", idSensor, String.format("INFO - Termina el sensor: %s", idSensor));
+		System.exit(0);
+	}
+	
+	record Evento(String sensor, @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss") Date enviado) {}
+	ObjectMapper converter = new ObjectMapper();
+	
+	@Scheduled(fixedDelay = 1000)
+	private void telemetria() throws JsonProcessingException {
+		sendEvent(tema + "-control", idSensor, converter.writeValueAsString(new Evento(idSensor, new Date())));
 	}
 	
 	@Autowired
@@ -50,6 +69,8 @@ public class AsyncKafkaSensorApplication implements CommandLineRunner {
 			.exceptionally(ex -> {
 				LOG.severe(String.format("TOPIC: %s, KEY: %s, VALUE: %s, ERROR: %s", 
 					topic, origen, value, ex.getMessage()));
+				sendEvent(tema + "-logger", idSensor, String.format("ERROR - TOPIC: %s, KEY: %s, VALUE: %s, ERROR: %s", 
+						topic, origen, value, ex.getMessage()));
 				return null;
 			});
 	}
