@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>async-kafka-sensor</artifactId>
+	<artifactId>async-kafka-consumer</artifactId>
 	<version>0.0.1</version>
-	<name>async-kafka-sensor</name>
+	<name>async-kafka-consumer</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>21</java.version>
