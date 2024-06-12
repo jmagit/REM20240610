@@ -54,8 +54,7 @@ public class EmisorResource {
 	public String raw(@PathVariable String nombre) throws JsonProcessingException {
 		var payload = new MessageDTO("Hola " + nombre, origen);
 		ObjectMapper mapper = new ObjectMapper();
-		var cad = mapper.writeValueAsString(payload);
-		var message = MessageBuilder.withBody(cad.getBytes()).build();
+		var message = MessageBuilder.withBody(mapper.writeValueAsString(payload).getBytes()).build();
 		amqp.send(deadLetterQueue.getName(), message);
 		return "SEND: " + message;
 	}
