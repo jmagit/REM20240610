@@ -31,6 +31,8 @@
 - https://github.com/spring-projects/spring-data-examples
 - https://github.com/spring-projects/spring-data-rest-webmvc
 - https://github.com/spring-projects/spring-hateoas-examples
+- https://github.com/spring-projects/spring-amqp-samples
+- https://github.com/rabbitmq/rabbitmq-tutorials/tree/main/spring-amqp
 
 ## Base de datos de ejemplos
 
