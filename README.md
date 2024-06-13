@@ -116,7 +116,7 @@ Fichero docker-compose.yml:
 
 Comando:
 
-      cd docker-compose\kafka && docker compose up
+      cd docker-compose\kafka && docker compose up -d
 
 #### Apache ActiveMQ o Artemis (JMS)
 
