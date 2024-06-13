@@ -12,7 +12,7 @@
 	<artifactId>amqp-receptor</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>async-amqp-receptor</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Ejemplo de receptor AMQP con RabbitMQ</description>
 	<properties>
 		<java.version>21</java.version>
 	</properties>

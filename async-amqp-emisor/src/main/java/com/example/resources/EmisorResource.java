@@ -107,7 +107,7 @@ public class EmisorResource {
 		if (response instanceof MessageDTO m) {
 			respuestas.put(m.getId(), m);
 		} else {
-			LOGGER.severe("Formato de respuesta desconocidor");
+			LOGGER.severe("Formato de respuesta desconocido");
 		}
 	}
 
@@ -115,7 +115,7 @@ public class EmisorResource {
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	@Operation(tags = { "web-hooks" })
 	public Map<String, String> solicita(@PathVariable String nombre) {
-		var peticion = new MessageDTO("Peticion de " + nombre, origen);
+		var peticion = new MessageDTO("Petición de " + nombre, origen);
 		asyncRabbitTemplate.convertSendAndReceive(rpcExchange.getName(), routingKey, peticion)
 				.thenAccept(result -> procesaRespuesta(result))
 				.exceptionally(ex -> {

@@ -53,11 +53,11 @@
 
       docker run -d --name mysql-sakila -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 jamarton/mysql-sakila
 
-####  MongoDB
+#### MongoDB
 
       docker run -d --name mongodb -p 27017:27017 -v .:/externo jamarton/mongodb-contactos
 
-####  Redis
+#### Redis
 
       docker run -d --name redis -p 6379:6379 redis
 
