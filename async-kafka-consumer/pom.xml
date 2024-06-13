@@ -12,7 +12,7 @@
 	<artifactId>async-kafka-consumer</artifactId>
 	<version>0.0.1</version>
 	<name>async-kafka-consumer</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Ejemplo de consumidor de eventos Kafka</description>
 	<properties>
 		<java.version>21</java.version>
 	</properties>
