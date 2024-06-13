@@ -54,7 +54,7 @@ public class AsyncWebsocketApplication implements CommandLineRunner {
 				}
 			}
 		}, 0, 5000);
-		remoto();
+//		remoto();
 	}
 
 	private static final String STOMP_SERVER_URL = "ws://localhost:8061/chat";
