@@ -38,6 +38,7 @@ public class DashboardSocketTextHandler extends TextWebSocketHandler {
 	
 	@Scheduled(fixedRate = 5000)
 	private void generaMetricas() throws IOException {
+		if(!clientes.hasSessions()) return;
 		Map<String, Object> metricas = new HashMap<>();
 		if(rnd.nextBoolean()) {
 			var sensores = new ArrayList<Integer>();

@@ -144,7 +144,7 @@
       if (input.value) {
         socket = new WebSocket(`ws://${location.host}/chat?${input.value}`);
         socket.onopen = () => trace("[open] Conexión establecida");
-        socket.onmessage = event => show(`${event.data}`)
+        socket.onmessage = function(event) { return show(`${event.data}`); } //event => show(`${event.data}`)
         socket.onclose = event => {
           trace(`[close] Conexión cerrada ${event.wasClean ? 'limpiamente' : 'con problemas'}, código: ${event.code}${event.reason ? ` motivo=${event.reason}` : ''}.`);
           toggle()
