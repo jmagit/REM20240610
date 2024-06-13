@@ -19,6 +19,9 @@ public class DashboardSocketService {
 		return sesiones;
 	}
 
+	public boolean hasSessions() {
+		return sesiones.size() > 0;
+	}
 	public void add(WebSocketSession session) {
 		sesiones.add(session);
 	}
@@ -31,7 +34,7 @@ public class DashboardSocketService {
 	
 	public void broadcast(Map<String, Object> metricas) throws IOException {
 		for (WebSocketSession client : sesiones) {
-			client.sendMessage(new TextMessage(serializador.writeValueAsBytes(metricas)));
+			client.sendMessage(new TextMessage(serializador.writeValueAsString(metricas)));
 		}
 	}
 }
