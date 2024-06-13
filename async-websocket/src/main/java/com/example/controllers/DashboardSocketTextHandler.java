@@ -36,19 +36,19 @@ public class DashboardSocketTextHandler extends TextWebSocketHandler {
 
 	static record Punto(int x, int y) {}
 	
-	@Scheduled(fixedRate = 1000)
+	@Scheduled(fixedRate = 5000)
 	private void generaMetricas() throws IOException {
 		Map<String, Object> metricas = new HashMap<>();
 		if(rnd.nextBoolean()) {
-		var sensores = new ArrayList<Integer>();
-		for(var i=1; i++ <= 6; sensores.add(rnd.nextInt(101)));
-		metricas.put("sensores", sensores);
+			var sensores = new ArrayList<Integer>();
+			for(var i=1; i++ <= 6; sensores.add(rnd.nextInt(101)));
+			metricas.put("sensores", sensores);
 		}
 		if(rnd.nextBoolean()) {
-		var puntos = new ArrayList<Punto>();
-		var limite = rnd.nextInt(5) + 5;
-		for(var i=1; i++ <= limite; puntos.add(new Punto(rnd.nextInt(120)+40, rnd.nextInt(10)+6)));
-		metricas.put("puntos", puntos);
+			var puntos = new ArrayList<Punto>();
+			var limite = rnd.nextInt(5) + 5;
+			for(var i=1; i++ <= limite; puntos.add(new Punto(rnd.nextInt(120)+40, rnd.nextInt(10)+6)));
+			metricas.put("puntos", puntos);
 		}
 		if(metricas.size() > 0)
 			clientes.broadcast(metricas);

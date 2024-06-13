@@ -13,8 +13,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 public class DashboardSocketService {
-	public static record Session(String name, WebSocketSession session) {}
-
 	private List<WebSocketSession> sesiones = new ArrayList<>();
 
 	public List<WebSocketSession> getAll() {

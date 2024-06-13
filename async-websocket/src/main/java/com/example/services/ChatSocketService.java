@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
@@ -32,6 +33,19 @@ public class ChatSocketService {
 
 	public String getName(WebSocketSession session) {
 		return sesiones.get(session.getId()).name();
+	}
+
+	public Optional<WebSocketSession> getSession(String name) {
+		var session = sesiones.get(name);
+		return session == null ? Optional.empty() : Optional.ofNullable(session.session);
+	}
+
+
+	public void sendMessage(String name, String message) throws IOException {
+		var client = getSession(name);
+		if(client.isPresent() && client.get().isOpen()) {
+			client.get().sendMessage(new TextMessage(message));
+		}
 	}
 
 	public void broadcast(String message) throws IOException {
